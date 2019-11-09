@@ -10,7 +10,40 @@ struct elem{ //pojemnik na liczby
         next = 0;
     }  
 };
- 
+void add_any_position (int data, int position, elem*& list) {
+	if (position == 1) { // Jesli jest to pierwszy musimy zaznaczyc ze jest to poczatek listy
+		elem* temp = new elem; // Tworzymy obiekt 
+		temp->data = data;//Wpisujemy wartosc podana przez uzytkownika
+		temp->next = list;	//Nasz wskaznik na kolejny (a raczej poprzedni obiekt) ustawiamy na nasza liste bo jest to pierwszy obiekt)
+		list = temp;	// nasza lista pokazuje na pierwszy jej obiekt wyzej utworzony
+	} else if (position > 1) {
+		elem* temp = new elem;
+		temp->data = data;
+		elem* prev = list;//tworzymy pomocniczy wskaznik ktory bedzie szukal miejsca gdzie wlozyc nasz nowy obiekt
+		int counter = 1;//licznik zeby sprawdzac gdzie mamy wlozyc obiekt
+		while (counter != (position-1)) {//pozycja-1 bo wstawiamy nasz obiekt przed ten istniejacy juz zeby go przesunac do przodu
+			counter++;
+			prev = prev->next;//przechodzimy po kolejnych obiektach
+			if (prev == NULL) {// jesli uzytykownik wpisze pozycje gdzies za lista to musimy to obsuzyc
+				cout << "Lista za krotka";
+				return;//sam return pozwala wyjsc z metody w dowolnej chwili
+			}
+		}
+		temp->next = prev->next;//nasz nowo utworzony obiekt musi pokazywac na jego poprzednika
+		prev->next = temp;// a ten obiekt ktory byl na tym miejscu musi pokazywac na ten "wepchniety" obiekt
+	} else {
+		cout << "Bledne dane";
+	}
+			
+}
+
+void showw (elem* list) {
+    	elem* temp = list;
+    	while (temp != NULL) {
+    		cout << "Liczba: " << temp->data << endl;
+			temp = temp->next; // przechodzimy po kolejnych wskaznikach pokazujacych na kolejne obiekty	
+		}
+}
 struct list {
     elem* first; //pierwsza liczba
    
