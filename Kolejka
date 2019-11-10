@@ -1,0 +1,52 @@
+struct elem{
+    int dana;       // miejsce na przechowywanie danych zapamiÄ?tanych w danym elemencie
+    elem* nast;     // wskaĹşnik na kolejny element kolejki
+};
+
+void add(elem* &pocz_kolejki, elem* &kon_kolejki, int x)
+{
+	elem* nowy = new elem();// Tworzymy nowy obiekt kolejki
+	nowy->dana = x;//wkladamy dana 
+	nowy->nast = NULL;//zerujemy nastepnika, bo polak tak chce
+	if (kon_kolejki != NULL){//jezeli kolejny element istnieje...
+		kon_kolejki->nast = nowy;//...to ma on pokazywac na nasz nowo utworzony obiekt
+	}else{
+		pocz_kolejki = nowy;//w innym przypadku nasz nowo utworzony obiekt jest poczatkiem kolejki
+	}
+	kon_kolejki = nowy;//nasz nowo utworzony obiekt jest koncem kolejki rowniez
+}
+
+int next(elem* &pocz_kolejki, elem* &kon_kolejki)
+{
+   if (!pocz_kolejki){//jezeli poczatek nie istnieje to piszemy po prostu error
+   		cout << "Pusta kolejka!" << endl;
+   		return;
+   }else {
+    	elem* stary = pocz_kolejki;//tworzymy pomocniczy wskaznik na poczatek kolejki
+    	int dana = stary->dana; //pobieramy sobie dana z poczatku
+    	pocz_kolejki = pocz_kolejki->nast;//ustawiamy zeby nasz poczatek pokazyal na drugi w kolejce obiekt (bo pierwszy usuwamy)
+    	delete stary;//usuwamy stary
+    	return dana;//zwracamy wartosc pierwszego obiektu
+   }
+}
+
+int firstEl(elem* pocz_kolejki)
+{
+	if (pocz_kolejki){
+		return pocz_kolejki->dana;
+	}
+    return -1;
+}
+
+bool isEmpty(elem* pocz_kolejki)
+{
+   return !pocz_kolejki;
+}
+void show(elem* pocz_kolejki)
+{
+	elem* temp = pocz_kolejki;//tworzymy pomocniczy wskaznik na poczatek...
+	while (temp != NULL){//...i dopoki on istnieje
+		cout << "Liczba " << temp->dana << endl;//wyswietlamy nasza dana
+		temp = temp->nast;	//i wchodzimy w nastepny obiekt w kolejce
+	}
+}
