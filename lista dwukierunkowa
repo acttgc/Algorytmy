@@ -1,0 +1,160 @@
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+
+struct elem { //pojemnik na liczby
+    int data;    
+    elem* next; 
+	elem* prev;
+};
+
+int how_many(elem* list){
+	int i = 0;
+	while (list != NULL){
+		list = list->next;
+		i++;
+	}
+	return i;
+}
+
+void add_any_position (int data, int position, elem*& list) {
+	if (list == NULL){
+		elem* first = new elem;
+		first->data = data;
+		first->next = NULL;
+		first->prev = NULL;
+		list = first;
+		return;
+	}
+	if (position == 1) {
+		elem* temp = new elem; 
+		temp->data = data;
+		temp->next = list;
+		temp->prev = NULL;
+		list->prev = temp;
+		list = temp;	
+	}else if(position > 1 && (how_many(list) >= position)){
+		elem* temp = new elem;
+		temp->data = data;
+		int counter = 1;
+		elem* back = list;
+		while (counter != (position-1)) {
+			counter++;
+			back = back->next;
+			if (back == NULL) {
+				cout << "Lista za krotka";
+				return;
+			}
+		}
+		temp->next = back->next;
+		temp->prev = back;
+		back->next->prev = temp;
+		back->next = temp;
+	} else if (position > 1) {
+		elem* temp = new elem;
+		temp->data = data;
+		int counter = 1;
+		elem* back = list;
+		while (counter != (position-1)) {
+			counter++;
+			back = back->next;
+			if (back == NULL) {
+				cout << "Lista za krotka";
+				return;
+			}
+		}
+		temp->next = back->next;
+		temp->prev = back;
+		back->next = temp;
+	} else {
+		cout << "Bledne dane";
+	}
+			
+}
+
+void deletee(int index, elem*& list){
+	if(how_many(list) >= index){
+		if(list->next == NULL){
+			list = NULL;
+			delete list;
+		}else if(index == 1){
+			elem* helper = list->next;
+			delete list;
+			list = helper;
+			list->prev = NULL;
+		}else if(index > 1){
+			int counter = 0;
+			elem* erese = list;
+			while(counter != (index-1)){
+				counter++;
+				erese = erese->next;	
+			}
+			if(erese->next == NULL){
+				elem * prevv = erese->prev;
+				delete erese;		
+				prevv->next = NULL;
+			}else{
+				erese->next->prev = erese->prev;
+				erese->prev->next = erese->next;
+				delete erese;	
+			}		
+		}
+	
+	}	
+}
+
+void showw (elem* list) {
+    	while (list != NULL) {
+    		cout << list->data << " ";
+			list = list->next; 
+		}
+}
+
+void reverse(elem* list){
+	if (list == NULL){
+		return;
+	}
+	reverse(list->next);
+	cout << list->data << " ";
+
+}
+void reverse_usingprev(elem* list){
+	elem* end = list;
+	while (end->next != NULL){
+		end = end->next;
+	}
+	while (end != NULL){
+		cout << end->data << " ";
+		end = end->prev;
+	}	
+}
+void convert (elem*& list){
+	elem* last = list;
+	while (last->next != NULL){
+		last = last->next;
+	}
+	last->next = list;
+	list->prev = last;
+}
+int main()
+{
+
+	elem* newww = NULL;
+	add_any_position(10, 1, newww);
+	add_any_position(12, 2, newww);
+	add_any_position(13, 2, newww);
+	add_any_position(1000, 1, newww);
+	add_any_position(20, 1, newww);
+	add_any_position(30, 3, newww);
+	add_any_position(31, 3, newww);
+	add_any_position(14, 2, newww);
+	showw(newww);
+	deletee(8,newww);
+	cout << endl;
+	reverse(newww);
+	deletee(6,newww);
+	cout << endl;
+	reverse_usingprev(newww);
+	return 0;	
+}
