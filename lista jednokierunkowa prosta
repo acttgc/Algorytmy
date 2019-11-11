@@ -31,10 +31,6 @@ void add_any_position (int data, int position, elem*& list) {
 		}
 		temp->next = prev->next;//nasz nowo utworzony obiekt musi pokazywac na jego poprzednika
 		prev->next = temp;// a ten obiekt ktory byl na tym miejscu musi pokazywac na ten "wepchniety" obiekt
-		//CYKLICZNOSC
-		if(prev->next == NULL){//jesli po wepchnieciu po prawej stronie nie ma obiektu...
-			temp->next = list;//...to ten nasz nowo dodany obiekt ma pokazywac na pierwszy obiekt listy
-		}
 	} else {
 		cout << "Bledne dane";
 	}
@@ -47,6 +43,17 @@ void showw (elem* list) {
     		cout << "Liczba: " << temp->data << endl;
 			temp = temp->next; // przechodzimy po kolejnych wskaznikach pokazujacych na kolejne obiekty	
 		}
+}
+void convert(elem*& list){
+	elem* tmp = list;
+	if(list != NULL)
+	{
+		while(tmp -> nast != NULL)
+		{
+			tmp = tmp -> nast;
+		} 
+		tmp -> nast = poczatek;
+	}
 }
 struct list {
     elem* first; //pierwsza liczba
