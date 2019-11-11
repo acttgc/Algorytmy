@@ -115,15 +115,4 @@ struct list {
         first = 0; 
     }
 };
- 
-int main()
-{
-    list* numbers = new list; //tworze liste
-    numbers->add(2);
-    numbers->add(3);
-    numbers->show();
-    numbers->dell(2);
-    numbers->show();
-    delete (numbers);
-    return 0;  
-}
+
