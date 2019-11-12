@@ -11,8 +11,8 @@ struct elem { //pojemnik na liczby
 
 int how_many(elem* list){ //przekazujemy adres pierwszego elementu listy przez wartość (kopia, nie modyfikujemy tego adresu)
 	int i = 0;
-	while (list != NULL){ //list to jest adres czy ten element?
-		list = list->next;
+	while (list != NULL){ //sprawdzamy czy istnieje ten element
+		list = list->next; //idziemy do kolejnego elementu, list równe kolejnemu elementowi
 		i++;
 	}
 	return i;
@@ -33,7 +33,7 @@ void add_any_position (int data, int position, elem*& list) { //podajemy co chce
 		temp->next = list;
 		temp->prev = NULL; //jest pierwszy na liście, więc nie pokazuje na żaden poprzedni
 		list->prev = temp; //musimy ustawić żeby element przed który wstawiamy nasz obiekt pokazywał na niego jako na poprzedni, czyli do jego preva obiektu list dajemy adres tempa
-		list = temp; //ustawiamy, że adresem listy jest adres obiektu prev
+		list = temp; //ustawiamy, że adresem listy jest adres obiektu temp
 	}else if(position > 1 && (how_many(list) >= position)){ //a jakby tutaj zrobić > zamiast >= to można by wywalić tego ifa z za krótką listą
 		elem* temp = new elem;
 		temp->data = data;
@@ -55,7 +55,7 @@ void add_any_position (int data, int position, elem*& list) { //podajemy co chce
 		elem* temp = new elem;
 		temp->data = data;
 		int counter = 1;
-		elem* back = list;
+		elem* back = list; 
 		while (counter != (position-1)) {
 			counter++;
 			back = back->next;
@@ -75,36 +75,36 @@ void add_any_position (int data, int position, elem*& list) { //podajemy co chce
 
 void deletee(int index, elem*& list){
 	if(how_many(list) >= index){
-		if(list->next == NULL){
-			list = NULL;
-			delete list;
-		}else if(index == 1){
-			elem* helper = list->next;
-			delete list;
-			list = helper;
-			list->prev = NULL;
+		if(list->next == NULL){ //jeśli next jest pusty to lista jest jednoelementowa 
+			list = NULL; //usuwamy ten pierwszy jedyny elemnt listy? potrzebne to jest?
+			delete list; //a tutaj znowu usuwamy listę?
+		}else if(index == 1){ //jeśli chcemy usunąć pierwszy element
+			elem* helper = list->next; //wskaźnik na drugi element listy
+			delete list; //usuwamy pierwszy element
+			list = helper; //to co pokazuje helper staje się pierwszym elementem
+			list->prev = NULL; //dlatego nie ma preva
 		}else if(index > 1){
 			int counter = 0;
-			elem* erese = list;
-			while(counter != (index-1)){
+			elem* erese = list; //wskaźnik na pierwszy element
+			while(counter != (index-1)){ //erase zatrzyma się na elemencie, który chcemy ususnąć
 				counter++;
 				erese = erese->next;	
 			}
-			if(erese->next == NULL){
-				elem * prevv = erese->prev;
-				delete erese;		
-				prevv->next = NULL;
-			}else{
-				erese->next->prev = erese->prev;
-				erese->prev->next = erese->next;
-				delete erese;	
+			if(erese->next == NULL){ //jeśli jest to ostatni element listy
+				elem * prevv = erese->prev; //wskaźnik na przedostatni element
+				delete erese; //ten ostatni usuwamy		
+				prevv->next = NULL; //a z przedostatniego usuwamy next
+			}else{ //tutaj jeśli to jest jakiś element w środku
+				erese->next->prev = erese->prev; //prev kolejnego elementu po tym usuwanym ustawiamy na ten obiekt przed usuwanym
+				erese->prev->next = erese->next; //next elementu przed tym usuwanym ustawiamy na obiekt po usuwanym
+				delete erese; //usuwamy 
 			}		
 		}
 	
 	}	
 }
 
-void showw (elem* list) {
+void showw (elem* list) { //tutaj wiadomo
     	while (list != NULL) {
     		cout << list->data << " ";
 			list = list->next; 
@@ -112,30 +112,30 @@ void showw (elem* list) {
 }
 
 void reverse(elem* list){
-	if (list == NULL){
-		return;
+	if (list == NULL){ //jak dojdziemy do końca
+		return; //to return zaczyna zdejmować te reversy ze stosu
 	}
-	reverse(list->next);
-	cout << list->data << " ";
+	reverse(list->next); //wywołujemy tą metodę ale zawsze dla kolejnego elementu listy
+	cout << list->data << " "; //zaczyna zdejmować od końca, więc mamy w odwrotnej kolejności
 
 }
 void reverse_usingprev(elem* list){
 	elem* end = list;
-	while (end->next != NULL){
+	while (end->next != NULL){ //szukamy ostatniego elementu
 		end = end->next;
 	}
-	while (end != NULL){
-		cout << end->data << " ";
-		end = end->prev;
+	while (end != NULL){ //jak jesteśmy na ostatnim elemencie 
+		cout << end->data << " "; //to wypisujemy data 
+		end = end->prev; //i lecimy do początku po wszystkich elementach wypisując po kolei
 	}	
 }
 void convert (elem*& list){
-	elem* last = list;
-	while (last->next != NULL){
-		last = last->next;
+	elem* last = list; //wskaźnik na pierwzy element
+	while (last->next != NULL){ 
+		last = last->next; //szukamy końca 
 	}
-	last->next = list;
-	list->prev = last;
+	last->next = list; //next ostatniego elementu ustawiamy na pierwszy
+	list->prev = last; //prev pierwszego ustawiamy na ostatni
 }
 int main()
 {
